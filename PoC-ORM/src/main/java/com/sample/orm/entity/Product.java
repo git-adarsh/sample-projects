@@ -52,4 +52,22 @@ public class Product implements Serializable{
 	public void setProductPrice(int productPrice) {
 		this.productPrice = productPrice;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Product Id; ");
+		sb.append(String.valueOf(productId));
+		sb.append("\n");
+		
+		sb.append("Product Name:");
+		sb.append(productName);
+		sb.append("\n");
+		
+		sb.append("Product Price: ");
+		sb.append(productPrice);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }

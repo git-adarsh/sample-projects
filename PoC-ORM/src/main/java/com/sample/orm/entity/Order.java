@@ -3,6 +3,7 @@ package com.sample.orm.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,19 +17,16 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "ORDER")
-public class Order implements Serializable{
+@Table(name = "ORDERS")
+public class Order implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7581744138020193191L;
 
 	@Id
 	@GeneratedValue(generator = "order-id-generator")
 	@GenericGenerator(name = "order-id-generator", strategy = "com.sample.orm.entity.order.generator.OrderIdGenerator")
-	@Column(name = "o_id", nullable = false)
-	private String orderId;
+	@Column(name = "O_ID", nullable = false)
+	private Integer orderId;
 
 	@Column(name = "ORDER_DATE")
 	private Date orderDate;
@@ -38,18 +36,19 @@ public class Order implements Serializable{
 		orderDate = new Date();
 	}
 
-	@OneToOne
-	private Product p_id;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "O_ID")
+	private Product product;
 
 	@ManyToOne
-	@JoinColumn(name = "U_NAME", nullable = false)
+	// @JoinColumn(name = "U_NAME", nullable = true)Ō
 	private User user;
 
-	public String getOrderId() {
+	public Integer getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 
@@ -61,12 +60,12 @@ public class Order implements Serializable{
 		this.orderDate = orderDate;
 	}
 
-	public Product getP_id() {
-		return p_id;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setP_id(Product p_id) {
-		this.p_id = p_id;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public User getUser() {
@@ -77,11 +76,6 @@ public class Order implements Serializable{
 		this.user = user;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,11 +84,6 @@ public class Order implements Serializable{
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -117,4 +106,26 @@ public class Order implements Serializable{
 		return true;
 	}
 
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Order Id: ");
+		sb.append(orderId);
+		sb.append("\n");
+		
+		sb.append("order date: ");
+		sb.append(orderDate);
+		sb.append("\n");
+		
+		sb.append("order date: ");
+		sb.append(orderDate);
+		sb.append("\n");
+		
+		sb.append("product: ");
+		sb.append(product != null ? product.toString(): "NULL");
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }
