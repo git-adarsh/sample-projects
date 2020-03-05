@@ -9,34 +9,40 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "AUTH")
-public class Auth implements Serializable{
+public class Auth implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7950821950425940299L;
 
 	@Id
-	@Column(name = "u_id", unique = true, length = 6, nullable = false)
-	private String username;
+	@Column(name = "AUTH_ID", unique = true, length = 6, nullable = false)
+	private String authId;
 
 	// save hash instead of plain pwd
-	@Column(name = "pwd")
+	@Column(name = "PWD")
 	private String pwd;
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+	
+	public void setAuthId(String authId) {
+		this.authId = authId;
+	}
+	
+	public String getAuthId() {
+		return authId;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Auth Id: ");
+		sb.append(authId);
+		sb.append("\n");
+		
+		sb.append("pwd: ");
+		sb.append(pwd);
+		sb.append("\n");
+		
+		return sb.toString();
 	}
 }

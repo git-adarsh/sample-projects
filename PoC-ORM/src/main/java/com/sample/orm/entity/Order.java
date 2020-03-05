@@ -37,11 +37,11 @@ public class Order implements Serializable {
 	}
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "O_ID")
+	@JoinColumn(name = "P_ID")
 	private Product product;
 
-	@ManyToOne
-	// @JoinColumn(name = "U_NAME", nullable = true)Ō
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "userId")
 	private User user;
 
 	public Integer getOrderId() {
@@ -106,26 +106,25 @@ public class Order implements Serializable {
 		return true;
 	}
 
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Order Id: ");
 		sb.append(orderId);
 		sb.append("\n");
-		
+
 		sb.append("order date: ");
 		sb.append(orderDate);
 		sb.append("\n");
-		
-		sb.append("order date: ");
-		sb.append(orderDate);
-		sb.append("\n");
-		
+
 		sb.append("product: ");
-		sb.append(product != null ? product.toString(): "NULL");
+		sb.append(product != null ? product.toString() : "NULL");
 		sb.append("\n");
 		
+		sb.append("User: ");
+		sb.append(user != null ? user.toString() : "NULL");
+		sb.append("\n");
+
 		return sb.toString();
 	}
 }
