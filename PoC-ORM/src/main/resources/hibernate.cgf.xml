@@ -15,5 +15,8 @@
 		<mapping class="com.sample.orm.entity.Order"></mapping>
 		<mapping class="com.sample.orm.entity.Product"></mapping>
 		<mapping class="com.sample.orm.entity.Auth"></mapping>
+		<mapping class="com.sample.orm.entity.PaidSubscriptionUser"></mapping>
+		<mapping class="com.sample.orm.entity.Subscription"></mapping>
+		
 	</session-factory>
 </hibernate-configuration>

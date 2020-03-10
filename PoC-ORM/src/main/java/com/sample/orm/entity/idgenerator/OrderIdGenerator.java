@@ -1,4 +1,4 @@
-package com.sample.orm.entity.order.generator;
+package com.sample.orm.entity.idgenerator;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -14,7 +14,7 @@ Random random = new Random();
 	@Override
 	public Serializable generate(SessionImplementor arg0, Object arg1) throws HibernateException {
 		Order order = (Order) arg1;
-		return random.nextInt();
+		return order.getUser().getAuth() +  random.nextInt();
 	}
 
 	

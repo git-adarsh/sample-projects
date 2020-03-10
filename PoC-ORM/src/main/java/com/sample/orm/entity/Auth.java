@@ -24,25 +24,29 @@ public class Auth implements Serializable {
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
-	
+
+	public String getPwd() {
+		return pwd;
+	}
+
 	public void setAuthId(String authId) {
 		this.authId = authId;
 	}
-	
+
 	public String getAuthId() {
 		return authId;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Auth Id: ");
 		sb.append(authId);
 		sb.append("\n");
-		
+
 		sb.append("pwd: ");
 		sb.append(pwd);
 		sb.append("\n");
-		
+
 		return sb.toString();
 	}
 }

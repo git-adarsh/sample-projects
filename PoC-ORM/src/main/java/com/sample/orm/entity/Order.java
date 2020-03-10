@@ -6,14 +6,17 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -24,31 +27,28 @@ public class Order implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "order-id-generator")
-	@GenericGenerator(name = "order-id-generator", strategy = "com.sample.orm.entity.order.generator.OrderIdGenerator")
+	@GenericGenerator(name = "order-id-generator", strategy = "com.sample.orm.entity.idgenerator.OrderIdGenerator")
 	@Column(name = "O_ID", nullable = false)
-	private Integer orderId;
+	private String orderId;
 
 	@Column(name = "ORDER_DATE")
-	private Date orderDate;
+	@Generated(GenerationTime.ALWAYS)
+	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
+	private Date orderDate = new java.sql.Date(new java.util.Date().getTime());
 
-	@PrePersist
-	protected void onCreate() {
-		orderDate = new Date();
-	}
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "P_ID")
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "productId")
 	private Product product;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
 
-	public Integer getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(Integer orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 
@@ -115,12 +115,12 @@ public class Order implements Serializable {
 
 		sb.append("order date: ");
 		sb.append(orderDate);
-		sb.append("\n");
+		sb.append("\n\n");
 
 		sb.append("product: ");
 		sb.append(product != null ? product.toString() : "NULL");
 		sb.append("\n");
-		
+
 		sb.append("User: ");
 		sb.append(user != null ? user.toString() : "NULL");
 		sb.append("\n");
