@@ -117,6 +117,7 @@ public class BasicOpsApp1 {
 		System.out.println("Fetching Order without saving in different session..");
 
 		// will throw NPE as the transaction wasn't committed in the s3 transaction.
+		System.out.println("### Expect a NPE ###");
 		System.out.println(((Order) s4.get(Order.class, oId)).toString());
 		factory.close();
 

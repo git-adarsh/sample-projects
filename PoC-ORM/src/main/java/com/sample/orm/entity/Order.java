@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,12 +17,44 @@ import javax.persistence.Temporal;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 @Entity
 @Table(name = "ORDERS")
+/**
+ * The queries have a lot of optimization scope (may be). TO DO: Dig further to
+ * optimize the queries
+ */
+@NamedQueries({
+		/*
+		 * An inner join. The usual "on" condition for a join is applied implicitly
+		 * orders for a particular productId
+		 */
+		@NamedQuery(name = "Order_TotalOrderForThisProduct", query = "Select p.productName from Order o join o.product p where p.productId = :productId"),
+		// Writing Select * gives error
+		@NamedQuery(name = "Order_ByUserId", query = "Select o from Order o join o.user u where u.authId = :authId"),
+		/*
+		 * Writing with the assumption that authId and productId are the columns (the
+		 * foreign key columns) in Orders give error. The query has to be written in
+		 * below format
+		 */
+		@NamedQuery(name = "Order_TotalOrderByAUserForAProduct", query = "Select count(*) from Order o join o.product p join o.user u where p.productId= :productId and u.authId = :authId"),
+		@NamedQuery(name = "Order_MostExpensiveOrderByAUser", query = "Select max(p.productPrice) from Order o join o.user u join o.product p where u.authId= :authId"),
+		@NamedQuery(name = "Order_TotalOrdersByAUser", query = "Select count(*) from Order o join o.user u where u.authId = :authId") })
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = -7581744138020193191L;
+
+	/**
+	 * Query Constants
+	 */
+
+	public final static String TOTAL_ORDERS_FOR_PRODUCT = "Order_TotalOrderForThisProduct";
+	public final static String TOTAL_ORDERS_FOR_USER = "Order_TotalOrdersByAUser";
+	public final static String TOTAL_ORDERS_FOR_PRODUCT_BY_USER = "Order_TotalOrderByAUserForAProduct";
+	public final static String MAX_PRICE_OF_ORDER_BY_USER = "Order_MostExpensiveOrderByAUser";
+	public final static String ORDERS_BY_USER = "Order_ByUserId";
 
 	@Id
 	@GeneratedValue(generator = "order-id-generator")
@@ -36,12 +67,19 @@ public class Order implements Serializable {
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date orderDate = new java.sql.Date(new java.util.Date().getTime());
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	/**
+	 * Here, adding CascadeType.ALL helps in saving the product's instances
+	 * implicitly. In real time scenarios, we wouldn't be creating a product when an
+	 * order is being placed. So, to avoid
+	 * <code>TransientObjectException: save transient instance first...</code>, we
+	 * explicitly need to save the product first and then the order instance
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "productId")
 	private Product product;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId")
+	@ManyToOne
+	@JoinColumn(name = "authId")
 	private User user;
 
 	public String getOrderId() {

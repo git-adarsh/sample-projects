@@ -9,9 +9,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table
+@Table(name = "SUBSCRIPTION")
 public class Subscription {
-
 	@Id
 	@GeneratedValue(generator = "subscription-id-generator")
 	@GenericGenerator(name = "subscription-id-generator", strategy = "com.sample.orm.entity.idgenerator.SubscriptionIdGenerator")
@@ -65,5 +64,4 @@ public class Subscription {
 				.append(", \n details=").append(details).append(", \n packValue=").append(packValue).append("]");
 		return builder.toString();
 	}
-
 }

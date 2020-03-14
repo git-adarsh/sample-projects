@@ -27,6 +27,7 @@ public class BasicOpsApp2 {
 		User user2 = new User();
 
 		// create orders
+
 		List<Order> list1 = getOrders(user1);
 		List<Order> list2 = getOrders(user2);
 
@@ -113,7 +114,7 @@ public class BasicOpsApp2 {
 			// bug order date is inserting as null
 			System.out.println("*************Total entries for " + c.getName() + ":" + list.size() + "***********");
 			list.forEach(System.out::println);
-			
+
 		} else {
 			System.out.println("*************Total entries for " + c.getName() + ":" + list.size() + "***********");
 		}

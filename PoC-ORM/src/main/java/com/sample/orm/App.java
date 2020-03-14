@@ -1,7 +1,5 @@
 package com.sample.orm;
 
-import java.io.Serializable;
-
 import org.hibernate.Session;
 
 import com.sample.orm.entity.Auth;

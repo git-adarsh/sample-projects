@@ -29,7 +29,6 @@ import javax.persistence.Table;
 // default name: DType, Type: String
 @DiscriminatorColumn(name = "USER_TYPE")
 public class User implements Serializable {
-
 	private static final long serialVersionUID = -5039625255700202489L;
 
 	@Id

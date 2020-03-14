@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
 /**
  * There can be two kinds of users: 1) A normal user (free membership) 2)
  * Subscribed user (paid membership)
@@ -20,9 +23,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PAID_SUBSCRIPTION_USER")
 @DiscriminatorValue("Paid")
+@NamedQueries({
+		@NamedQuery(name = "PaidSubscriptionUser_UsersWhoSubscribedTo", query = "Select pu from PaidSubscriptionUser pu join pu.pack where pu.pack.id= :packId"),
+		@NamedQuery(name = "PaidSubscriptionUser_UsersWhoseStatusIsActive", query = "Select pu from PaidSubscriptionUser pu where pu.isActive=true"),
+		@NamedQuery(name = "PaidSubscriptionUser_UsersWhoseStatusIsNotActive", query = "Select pu from PaidSubscriptionUser pu where pu.isActive=false") })
 public class PaidSubscriptionUser extends User {
 
 	private static final long serialVersionUID = -3576144807817979722L;
+
+	/** Query constants */
+	public static final String USERS_SUBSCRIBED_TO_SCHEME = "PaidSubscriptionUser_UsersWhoSubscribedTo";
+	public static final String ACTIVE_USERS = "PaidSubscriptionUser_UsersWhoseStatusIsActive";
+	public static final String INACTIVE_USERS = "PaidSubscriptionUser_UsersWhoseStatusIsNotActive";
 
 	@Column(name = "SUBSCRIPTION_STATUS")
 	private boolean isActive;
@@ -80,15 +92,15 @@ public class PaidSubscriptionUser extends User {
 		sb.append("contact: ");
 		sb.append(getContact());
 		sb.append("\n");
-		
+
 		sb.append("isActive: ");
 		sb.append(isActive());
 		sb.append("\n");
-		
+
 		sb.append("pack: ");
 		sb.append(getPack());
 		sb.append("\n");
-		
+
 		sb.append("renewed date: ");
 		sb.append(getRenewDate());
 		sb.append("\n");
